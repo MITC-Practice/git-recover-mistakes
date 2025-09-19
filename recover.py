@@ -1,1 +1,1 @@
-# for git revert, git reset and git checkout
+# tutorial for git revert, git reset and git checkout
