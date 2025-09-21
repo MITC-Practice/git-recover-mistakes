@@ -1,0 +1,46 @@
+name: trufflehog
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]   # ana dalın adı farklıysa değiştir
+
+jobs:
+  trufflehog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create excludes file
+        run: |
+          cat > .excludes-trufflehog <<'EOF'
+          ^node_modules/
+          ^dist/
+          ^build/
+          ^coverage/
+          ^\.git/
+          ^\.venv/
+          ^\.pytest_cache/
+          \.(jpg|jpeg|png|gif|svg|ico|mp4|mov|pdf|zip|tar|gz|tgz|7z)$
+          ^\.env(\..*)?$
+          EOF
+
+      - name: TruffleHog scan
+        uses: trufflesecurity/trufflehog-oss@v3
+        with:
+          extra_args: >-
+            git
+            ${{ github.event_name == 'pull_request'
+                && format('--since-commit {0} --branch {1}', github.event.pull_request.base.sha, github.sha)
+                || '' }}
+            --results=verified,unknown
+            --only-verified
+            --fail
+            --no-update
+            --exclude-paths .excludes-trufflehog

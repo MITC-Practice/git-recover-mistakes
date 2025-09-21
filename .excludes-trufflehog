@@ -1,0 +1,9 @@
+^node_modules/
+^dist/
+^build/
+^coverage/
+^\.git/
+^\.venv/
+^\.pytest_cache/
+\.(jpg|jpeg|png|gif|svg|ico|mp4|mov|pdf|zip|tar|gz|tgz|7z)$
+^\.env(\..*)?$
