@@ -3,7 +3,7 @@ name: trufflehog
 on:
   pull_request:
   push:
-    branches: [ main ]   # ana dalın adı farklıysa değiştir
+    branches: [ main ]   # if the default branch is 'main', otherwise change it accordingly
 
 jobs:
   trufflehog:
